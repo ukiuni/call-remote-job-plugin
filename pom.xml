@@ -9,7 +9,7 @@
   <groupId>org.ukiuni.callOtherJenkins</groupId>
   <artifactId>call-remote-job-plugin</artifactId>
   <name>Call Remote Job plugin</name>
-  <version>1.0.9</version>
+  <version>1.0.10-SNAPSHOT</version>
   <packaging>hpi</packaging>
   <url>https://github.com/ukiuni/call-remote-job-plugin/blob/master/README.md</url>
   <scm>
