@@ -13,8 +13,8 @@
   <packaging>hpi</packaging>
   <url>https://github.com/ukiuni/call-remote-job-plugin/blob/master/README.md</url>
   <scm>
-    <connection>scm:git:ssh://github.com/jenkinsci/call-remote-job-plugin.git</connection>
-    <developerConnection>scm:git:ssh://git@github.com/jenkinsci/call-remote-job-plugin.git</developerConnection>
+    <connection>scm:git:http://github.com/jenkinsci/call-remote-job-plugin.git</connection>
+    <developerConnection>scm:git:http://github.com/jenkinsci/call-remote-job-plugin.git</developerConnection>
     <url>https://github.com/jenkinsci/call-remote-job-plugin.git</url>
   </scm>
   <developers>
@@ -39,11 +39,4 @@
     </pluginRepository>
   </pluginRepositories>
 
-  <properties>
-    <!--
-      explicitly specifying the latest version here because one we get from the parent POM
-      tends to lag behind a bit
-    -->
-    <maven-hpi-plugin.version>1.95</maven-hpi-plugin.version>
-  </properties>
 </project>
