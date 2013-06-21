@@ -12,6 +12,11 @@
   <version>1.0.9</version>
   <packaging>hpi</packaging>
   <url>https://github.com/ukiuni/call-remote-job-plugin/blob/master/README.md</url>
+  <scm>
+    <connection>scm:git:ssh://github.com/jenkinsci/call-remote-job-plugin.git</connection>
+    <developerConnection>scm:git:ssh://git@github.com/jenkinsci/call-remote-job-plugin.git</developerConnection>
+    <url>https://github.com/jenkinsci/call-remote-job-plugin.git</url>
+  </scm>
   <developers>
     <developer>
       <id>ukiuni</id>
