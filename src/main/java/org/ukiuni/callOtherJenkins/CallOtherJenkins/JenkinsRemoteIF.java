@@ -7,8 +7,9 @@ import java.io.PrintStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import net.sf.json.JSONObject;
+
 import org.apache.commons.codec.binary.Base64;
-import org.json.JSONObject;
 
 public class JenkinsRemoteIF {
 
@@ -41,7 +42,8 @@ public class JenkinsRemoteIF {
 		String url = (useHttps ? "https" : "http") + "://" + hostName + "/job/" + jobName + "/api/json?tree=lastBuild[number]";
 		out.println("call " + url.toString());
 		HttpURLConnection connection = load(url);
-		JSONObject jsonResponse = new JSONObject(streamToString(connection.getInputStream(), "UTF-8"));
+
+		JSONObject jsonResponse = JSONObject.fromObject(streamToString(connection.getInputStream(), "UTF-8"));
 		return jsonResponse.getJSONObject("lastBuild").getLong("number");
 	}
 
@@ -49,7 +51,7 @@ public class JenkinsRemoteIF {
 		String url = (useHttps ? "https" : "http") + "://" + hostName + "/job/" + jobName + "/api/json?tree=nextBuildNumber";
 		out.println("call " + url.toString());
 		HttpURLConnection connection = load(url);
-		JSONObject jsonResponse = new JSONObject(streamToString(connection.getInputStream(), "UTF-8"));
+		JSONObject jsonResponse = JSONObject.fromObject(streamToString(connection.getInputStream(), "UTF-8"));
 		return jsonResponse.getLong("nextBuildNumber");
 	}
 
@@ -83,19 +85,19 @@ public class JenkinsRemoteIF {
 		for (int i = 0; i < retry; i++) {
 			out.println("call " + (i + 1) + "'st " + url.toString());
 			HttpURLConnection connection = load(url);
-			JSONObject jsonResponse = new JSONObject(streamToString(connection.getInputStream(), "UTF-8"));
+			JSONObject jsonResponse = JSONObject.fromObject(streamToString(connection.getInputStream(), "UTF-8"));
 
-			if (jsonResponse.isNull("lastCompletedBuild")) {
+			if (jsonResponse.getJSONObject("lastCompletedBuild").isNullObject()) {
 				continue;
 			}
 			Long buildNum = jsonResponse.getJSONObject("lastCompletedBuild").getLong("number");
 			if (null != buildNum && buildNum.longValue() >= number) {
 				LastCompleteBuild lastCompleteBuild = new LastCompleteBuild();
 				lastCompleteBuild.number = buildNum;
-				if ((!jsonResponse.isNull("lastSuccessfulBuild")) && buildNum.equals(jsonResponse.getJSONObject("lastSuccessfulBuild").getLong("number"))) {
+				if ((!jsonResponse.getJSONObject("lastSuccessfulBuild").isNullObject()) && buildNum.equals(jsonResponse.getJSONObject("lastSuccessfulBuild").getLong("number"))) {
 					lastCompleteBuild.success = true;
 				}
-				if ((!jsonResponse.isNull("lastFailedBuild")) && buildNum.equals(jsonResponse.getJSONObject("lastFailedBuild").getLong("number"))) {
+				if ((!jsonResponse.getJSONObject("lastFailedBuild").isNullObject()) && buildNum.equals(jsonResponse.getJSONObject("lastFailedBuild").getLong("number"))) {
 					lastCompleteBuild.success = false;
 				}
 				return lastCompleteBuild;

@@ -114,7 +114,7 @@ public class CallOtherJenkinsBuilder extends Builder {
 	 * 
 	 * <p>
 	 * See
-	 * <tt>src/main/resources/hudson/plugins/hello_world/CallOtherJenkinsBuilder/*.jelly</tt>
+	 * <tt>src/main/resources/org/ukiuni/callOtherJenkins/CallOtherJenkinsBuilder/*.jelly</tt>
 	 * for the actual HTML fragment for the configuration screen.
 	 */
 	@Extension
@@ -168,7 +168,7 @@ public class CallOtherJenkinsBuilder extends Builder {
 		 * This human readable name is used in the configuration screen.
 		 */
 		public String getDisplayName() {
-			return "Call other jenkins";
+			return "Call remote jenkins job";
 		}
 
 		@Override

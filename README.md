@@ -1,5 +1,5 @@
-CallOtherJenkinsPlugin
+Call Remote Job Plugin
 ======================
-CallOtherJenkinsPlugin is jenkins plugin for call remote jenkins job.
+Call Remote Job Plugin is jenkins plugin for call remote jenkins job.
 
-CallOtherJenkinsPluginはリモートのJenkinsジョブを呼び出すことのできるプラグインです。
+Call Remote Job PluginはリモートのJenkinsジョブを呼び出すことのできるプラグインです。
