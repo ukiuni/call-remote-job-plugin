@@ -7,7 +7,7 @@
   </parent>
 
   <groupId>org.ukiuni.callOtherJenkins</groupId>
-  <artifactId>CallOtherJenkins</artifactId>
+  <artifactId>call-remote-job-plugin</artifactId>
   <version>1.0.8-SNAPSHOT</version>
   <packaging>hpi</packaging>
   <url>https://github.com/ukiuni/CallOtherJenkinsPlugin/blob/master/README.md</url>
