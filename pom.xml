@@ -8,10 +8,10 @@
 
   <groupId>org.ukiuni.callOtherJenkins</groupId>
   <artifactId>call-remote-job-plugin</artifactId>
-  <name>Call Remote Job plugin</name>
+  <name>Call Remote Job Plugin</name>
   <version>1.0.14-SNAPSHOT</version>
   <packaging>hpi</packaging>
-  <url>https://github.com/ukiuni/call-remote-job-plugin/blob/master/README.md</url>
+  <url>https://wiki.jenkins-ci.org/display/JENKINS/Call+Remote+Job+Plugin</url>
   <scm>
     <connection>scm:git:ssh://git@github.com/jenkinsci/call-remote-job-plugin.git</connection>
     <developerConnection>scm:git:ssh://git@github.com/jenkinsci/call-remote-job-plugin.git</developerConnection>
