@@ -9,7 +9,8 @@
   <groupId>org.ukiuni.callOtherJenkins</groupId>
   <artifactId>call-remote-job-plugin</artifactId>
   <name>Call Remote Job Plugin</name>
-  <version>1.0.15-SNAPSHOT</version>
+  <description>Call another jenkins job. and get result. Job is fail when remote job is fail</description>
+  <version>1.0.16-SNAPSHOT</version>
   <packaging>hpi</packaging>
   <url>https://wiki.jenkins-ci.org/display/JENKINS/Call+Remote+Job+Plugin</url>
   <scm>
