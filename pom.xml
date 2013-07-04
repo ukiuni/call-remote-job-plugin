@@ -10,7 +10,7 @@
   <artifactId>call-remote-job-plugin</artifactId>
   <name>Call Remote Job Plugin</name>
   <description>Call another jenkins job. and get result. Job is fail when remote job is fail</description>
-  <version>1.0.17-SNAPSHOT</version>
+  <version>1.0.18-SNAPSHOT</version>
   <packaging>hpi</packaging>
   <url>https://wiki.jenkins-ci.org/display/JENKINS/Call+Remote+Job+Plugin</url>
   <scm>
