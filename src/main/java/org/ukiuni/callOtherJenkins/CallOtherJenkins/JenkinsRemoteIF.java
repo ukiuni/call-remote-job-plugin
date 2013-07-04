@@ -75,7 +75,8 @@ public class JenkinsRemoteIF {
 	}
 
 	public void exec(PrintStream out) throws IOException {
-		String url = ((useHttps ? "https" : "http") + "://" + hostName + "/job/" + jobName + "/build" + parameters);
+		String lastURL = (parameters == null || "".equals(parameters)) ? "/build" : "/buildWithParameters" + parameters;
+		String url = ((useHttps ? "https" : "http") + "://" + hostName + "/job/" + jobName + lastURL);
 		out.println("call " + url.toString());
 		load(url, true);
 	}
