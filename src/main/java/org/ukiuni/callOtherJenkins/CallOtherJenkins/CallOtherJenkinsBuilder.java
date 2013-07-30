@@ -3,13 +3,21 @@ package org.ukiuni.callOtherJenkins.CallOtherJenkins;
 import hudson.Extension;
 import hudson.Launcher;
 import hudson.model.BuildListener;
+import hudson.model.ParameterValue;
 import hudson.model.AbstractBuild;
 import hudson.model.AbstractProject;
+import hudson.model.ParametersAction;
+import hudson.model.PasswordParameterValue;
+import hudson.model.StringParameterValue;
+import hudson.model.TextParameterValue;
 import hudson.tasks.BuildStepDescriptor;
 import hudson.tasks.Builder;
 import hudson.util.FormValidation;
 
 import java.io.IOException;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.TreeMap;
 
 import javax.servlet.ServletException;
 
@@ -19,6 +27,7 @@ import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.QueryParameter;
 import org.kohsuke.stapler.StaplerRequest;
 import org.ukiuni.callOtherJenkins.CallOtherJenkins.JenkinsRemoteIF.LastCompleteBuild;
+import org.ukiuni.callOtherJenkins.CallOtherJenkins.util.ReplaceUtil;
 
 /**
  * Call other jenkins job
@@ -78,12 +87,29 @@ public class CallOtherJenkinsBuilder extends Builder {
 	@Override
 	public boolean perform(@SuppressWarnings("rawtypes") AbstractBuild build, Launcher launcher, BuildListener listener) {
 		try {
+			ParametersAction parameters = build.getAction(ParametersAction.class);
+			TreeMap<String, String> sortedParameterMap = new TreeMap<String, String>(new LongKeyValueComparator());
+			if (null != parameters) {
+				for (ParameterValue parameterValue : parameters.getParameters()) {
+					if (parameterValue instanceof TextParameterValue) {
+						sortedParameterMap.put(parameterValue.getName(), ((TextParameterValue) parameterValue).value);
+					}
+					if (parameterValue instanceof StringParameterValue) {
+						sortedParameterMap.put(parameterValue.getName(), ((StringParameterValue) parameterValue).value);
+					}
+					if (parameterValue instanceof PasswordParameterValue) {
+						sortedParameterMap.put(parameterValue.getName(), ((PasswordParameterValue) parameterValue).getValue().getPlainText());
+					}
+				}
+			}
 			JenkinsRemoteIF jenkinsRemoteIF = new JenkinsRemoteIF(getHostName(), getJobName(), getDescriptor().getHttps());
 			if (null != getUserName() && !"".equals(getUserName())) {
-				jenkinsRemoteIF.setAuthentication(getUserName(), getPassword());
+				jenkinsRemoteIF.setAuthentication(ReplaceUtil.replaceParam(getUserName(), sortedParameterMap), ReplaceUtil.replaceParam(getPassword(), sortedParameterMap));
 			}
 			if (null != getParameters() && !"".equals(getParameters())) {
-				jenkinsRemoteIF.setParameters(getParameters());
+				String parameterString = getParameters();
+				String replacedParameterString = ReplaceUtil.replaceParam(parameterString, sortedParameterMap);
+				jenkinsRemoteIF.setParameters(replacedParameterString);
 			}
 			long nextBuildNumber = jenkinsRemoteIF.loadNextBuildNumber(listener.getLogger());
 			jenkinsRemoteIF.exec(listener.getLogger());
@@ -96,9 +122,13 @@ public class CallOtherJenkinsBuilder extends Builder {
 		}
 	}
 
-	// Overridden for better type safety.
-	// If your plugin doesn't really define any property on Descriptor,
-	// you don't have to do this.
+	private static class LongKeyValueComparator implements Comparator<String> {
+		@Override
+		public int compare(String o1, String o2) {
+			return o2.length() - o1.length();
+		}
+	}
+
 	@Override
 	public DescriptorImpl getDescriptor() {
 		return (DescriptorImpl) super.getDescriptor();
