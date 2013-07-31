@@ -15,9 +15,8 @@ import hudson.tasks.Builder;
 import hudson.util.FormValidation;
 
 import java.io.IOException;
-import java.util.Comparator;
 import java.util.HashMap;
-import java.util.TreeMap;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 
@@ -88,27 +87,27 @@ public class CallOtherJenkinsBuilder extends Builder {
 	public boolean perform(@SuppressWarnings("rawtypes") AbstractBuild build, Launcher launcher, BuildListener listener) {
 		try {
 			ParametersAction parameters = build.getAction(ParametersAction.class);
-			TreeMap<String, String> sortedParameterMap = new TreeMap<String, String>(new LongKeyValueComparator());
+			Map<String, String> parameterMap = new HashMap<String, String>();
 			if (null != parameters) {
 				for (ParameterValue parameterValue : parameters.getParameters()) {
 					if (parameterValue instanceof TextParameterValue) {
-						sortedParameterMap.put(parameterValue.getName(), ((TextParameterValue) parameterValue).value);
+						parameterMap.put(parameterValue.getName(), ((TextParameterValue) parameterValue).value);
 					}
 					if (parameterValue instanceof StringParameterValue) {
-						sortedParameterMap.put(parameterValue.getName(), ((StringParameterValue) parameterValue).value);
+						parameterMap.put(parameterValue.getName(), ((StringParameterValue) parameterValue).value);
 					}
 					if (parameterValue instanceof PasswordParameterValue) {
-						sortedParameterMap.put(parameterValue.getName(), ((PasswordParameterValue) parameterValue).getValue().getPlainText());
+						parameterMap.put(parameterValue.getName(), ((PasswordParameterValue) parameterValue).getValue().getPlainText());
 					}
 				}
 			}
 			JenkinsRemoteIF jenkinsRemoteIF = new JenkinsRemoteIF(getHostName(), getJobName(), getDescriptor().getHttps());
 			if (null != getUserName() && !"".equals(getUserName())) {
-				jenkinsRemoteIF.setAuthentication(ReplaceUtil.replaceParam(getUserName(), sortedParameterMap), ReplaceUtil.replaceParam(getPassword(), sortedParameterMap));
+				jenkinsRemoteIF.setAuthentication(ReplaceUtil.replaceParam(getUserName(), parameterMap), ReplaceUtil.replaceParam(getPassword(), parameterMap));
 			}
 			if (null != getParameters() && !"".equals(getParameters())) {
 				String parameterString = getParameters();
-				String replacedParameterString = ReplaceUtil.replaceParam(parameterString, sortedParameterMap);
+				String replacedParameterString = ReplaceUtil.replaceParam(parameterString, parameterMap);
 				jenkinsRemoteIF.setParameters(replacedParameterString);
 			}
 			long nextBuildNumber = jenkinsRemoteIF.loadNextBuildNumber(listener.getLogger());
@@ -119,13 +118,6 @@ public class CallOtherJenkinsBuilder extends Builder {
 		} catch (Exception e) {
 			e.printStackTrace(listener.getLogger());
 			return false;
-		}
-	}
-
-	private static class LongKeyValueComparator implements Comparator<String> {
-		@Override
-		public int compare(String o1, String o2) {
-			return o2.length() - o1.length();
 		}
 	}
 
