@@ -91,7 +91,7 @@ public class CallOtherJenkinsBuilder extends Builder {
 			
 			Map<String, String> envMap = System.getenv();
 			for (String envKey : envMap.keySet()) {
-				parameterMap.put("$" + envKey, envMap.get(envKey));
+				parameterMap.put(envKey, envMap.get(envKey));
 			}
 			
 			if (null != parameters) {
