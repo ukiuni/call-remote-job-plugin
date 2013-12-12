@@ -88,6 +88,12 @@ public class CallOtherJenkinsBuilder extends Builder {
 		try {
 			ParametersAction parameters = build.getAction(ParametersAction.class);
 			Map<String, String> parameterMap = new HashMap<String, String>();
+			
+			Map<String, String> envMap = System.getenv();
+			for (String envKey : envMap.keySet()) {
+				parameterMap.put("$" + envKey, envMap.get(envKey));
+			}
+			
 			if (null != parameters) {
 				for (ParameterValue parameterValue : parameters.getParameters()) {
 					if (parameterValue instanceof TextParameterValue) {
